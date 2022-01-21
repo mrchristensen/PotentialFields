@@ -5,29 +5,35 @@ import os
 import time
 import math
 
+# https://techcommunity.microsoft.com/t5/windows-dev-appconsult/running-wsl-gui-apps-on-windows-10/ba-p/1493242
+
 # *****************************************************************************************************************
-# 
+#
 # 	TODO: Write the function computeTrajectory
 #  			robotPos: an array that contains the position (x-coordinate, y-coordinate, direction)  of the robot in the world
 # 	 		goalPos: an array that contains the position (x-coordinate, y-coordinate) of the robot's goal
 # 	 		distanceSensors: an array that contains the distance reading (how far to an object) on each of the robot sensors,
-# 	 						 which are positioned in a ring around the robot at even distances. 
+# 	 						 which are positioned in a ring around the robot at even distances.
 # 	 						 Examples (for orientation):
 # 	 						   distanceSensors[0] gives the distance reading directly to the robot's right
 # 							   distanceSensors[4] gives the distance reading direclty in front of the robot
 # 							   distanceSensors[8] gives the distance reading direclty to the robot's left
 # 							   distanceSensors[12] gives the distance reading direclty behind the robot
-# 	 		This function should return a normalized array that specifies the absolute (in world coordinates) 
+# 	 		This function should return a normalized array that specifies the absolute (in world coordinates)
 # 				direction the robot should go in the world as a vector.
 # 	 		For example: if you want the robot to go straight to the right, trajectory[0] = 1, trajectory[1] = 0
 # 	 		             if you wan the robot to go straight up in the world, trajectory[0] = 0, trajectory[1] = 1
-#  
+#
 #  ****************************************************************************************************************
 def computeTrajectory(robotPos, goalPos, distanceSensors):
 	# TODO: tells the robot the robot which direction to go (default specified here: robot goes up)
+	d = math.sqrt((goalPos[0] - robotPos[0])**2 + (robotPos[1] - goalPos[1])**2)
+	theta = math.atan2((goalPos[1] - robotPos[1]), (goalPos[0] - robotPos[0]))
+	print("robotPos: ", robotPos)
+
 	trajectory = []
-	trajectory.append(0.0)
-	trajectory.append(1.0)
+	trajectory.append(math.cos(theta))
+	trajectory.append(math.sin(theta))
 
 	# call this function to normalize the trajectory vector (so that it is a unit vector)
 	trajectory = normalize(trajectory)
@@ -63,7 +69,7 @@ def endSimulation():
 	return False
 
 def writeTrajectory(destination, speed, v):
-	fnombre = "../Robot/output/" + destination + ".tmp"; 
+	fnombre = "../Robot/output/" + destination + ".tmp";
 	f = open(fnombre, "w")
 
 	f.write(str(speed) + "\n")
@@ -84,7 +90,7 @@ def readPerception(source):
 	if f.closed:
 		print("percept.txt not found")
 		quit()
-	
+
 	robotPos = []
 	for i in range(0,3):
 		robotPos.append(float(f.readline()))
@@ -102,7 +108,7 @@ def readPerception(source):
 	return robotPos, chargerPos, distanceSensors
 
 # Start of the program
-# python3 agentPython.py [pfields/false] [navigate/false] 
+# python3 agentPython.py [pfields/false] [navigate/false]
 if __name__ == "__main__":
 	print("agentPython " + sys.argv[0] + " " + sys.argv[1] + " " + sys.argv[2])
 
@@ -130,11 +136,11 @@ if __name__ == "__main__":
 						break
 
 					words = strng.split(" ")
-					
+
 					robotPos.append(float(words[0]))
 					robotPos.append(float(words[1]))
 					robotPos.append(float(words[2]))
-				
+
 					chargerPos = []
 					chargerPos.append(float(words[3]))
 					chargerPos.append(float(words[4]))
@@ -146,13 +152,13 @@ if __name__ == "__main__":
 					trajectory = computeTrajectory(robotPos, chargerPos, distanceSensors)
 
 					fo.write(str(robotPos[0]) + " " + str(robotPos[1]) + " " + str(robotPos[2]) + " 1.0 " + str(trajectory[0]) + " " + str(trajectory[1]) + "\n")
-				
+
 				fo.close()
 
 				os.system("mv ../Robot/output/globaltrajectory.tmp ../Robot/output/globaltrajectory.txt");
 
 			f.close()
-	
+
 	# do only if navigate is turned on with the second argument
 	if sys.argv[2] == "navigate":
 		print("navigating")
