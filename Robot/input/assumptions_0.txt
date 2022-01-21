@@ -1,0 +1,6 @@
+robot_color 0.0 0 0.8
+charger_color 0.8 0 0
+speed 6
+spin 30
+robot_radius 5
+charger_dim 7 7
