@@ -26,14 +26,28 @@ import math
 #
 #  ****************************************************************************************************************
 def computeTrajectory(robotPos, goalPos, distanceSensors):
-	# TODO: tells the robot the robot which direction to go (default specified here: robot goes up)
 	d = math.sqrt((goalPos[0] - robotPos[0])**2 + (robotPos[1] - goalPos[1])**2)
-	theta = math.atan2((goalPos[1] - robotPos[1]), (goalPos[0] - robotPos[0]))
+	goal_theta = math.atan2((goalPos[1] - robotPos[1]), (goalPos[0] - robotPos[0]))
 	print("robotPos: ", robotPos)
 
+	goal_vector = []
+	goal_vector.append(math.cos(goal_theta))
+	goal_vector.append(math.sin(goal_theta))
+
+	obstacle_vector = [0.0, 0.0]
+	inc = math.pi * 2.0 / 16.0
+	offset = (robotPos[2] * math.pi / 180.0) - (math.pi / 2.0)
+	threshold = 8
+	for i in range(16):
+		if distanceSensors[i] < threshold:
+			sensorAngle = offset + (i * inc)
+			mag = (threshold - distanceSensors[i])**2
+			obstacle_vector[0] += mag * math.cos(sensorAngle - math.pi)
+			obstacle_vector[1] += mag * math.sin(sensorAngle - math.pi)
+
 	trajectory = []
-	trajectory.append(math.cos(theta))
-	trajectory.append(math.sin(theta))
+	trajectory.append(goal_vector[0] + obstacle_vector[0])
+	trajectory.append(goal_vector[1] + obstacle_vector[1])
 
 	# call this function to normalize the trajectory vector (so that it is a unit vector)
 	trajectory = normalize(trajectory)

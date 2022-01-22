@@ -1,2 +1,2 @@
-rate 1
-direction 0
+rate 0.5
+direction -1
