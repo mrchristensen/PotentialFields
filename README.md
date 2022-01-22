@@ -6,7 +6,7 @@ _Note: If you are having a hard time getting the code working properly (my apolo
 
 Experience creating a reflex agent.
 
-##Problem Description
+## Problem Description
 
 A robot is placed in a world with the task of navigating through its environment to its charger. The robot has sensors that allow it to:
 
