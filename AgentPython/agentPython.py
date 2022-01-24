@@ -114,7 +114,7 @@ def readPerception(source):
 		chargerPos.append(float(f.readline()))
 
 	distanceSensors = []
-	for i in range(0,3):
+	for i in range(0,16):
 		distanceSensors.append(float(f.readline()))
 
 	f.close();
