@@ -57,7 +57,7 @@ Submit a brief document that includes the following:
 
 This will launch a GUI through which you can evaluate your algorithms on the robot.
 
-(For WSL, run XLaunch and set your display variable: `export DISPLAY="127.0.0.1:0.0`)
+(For WSL, run XLaunch and set your display variable: `export DISPLAY="127.0.0.1:0.0"`)
 
 ## Interface Controls
 
